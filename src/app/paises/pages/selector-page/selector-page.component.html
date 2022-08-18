@@ -1,0 +1,56 @@
+<h1 class="mt-5">Selectores Anidados</h1>
+<hr>
+
+
+<form [formGroup]="form" (ngSubmit)="save()">
+    <div class="row">
+        <div class="col">
+            <label for="continente" class="form-label">Región:</label>
+            <select class="form-control" formControlName="region">
+                <option value=""> -- Select Región -- </option>
+                <option *ngFor="let region of regions; let i = index" [value]="region | lowercase">
+                    {{ region }}
+                </option>
+            </select>
+
+            <!-- Select Country -->
+            <div *ngIf="form.controls['region']?.value !== ''">
+                <label for="country" class="form-label mt-2">Country</label>
+                <select class="form-control" name="country" formControlName="country">
+                    <option value=""> -- Select Country -- </option>
+                    <option *ngFor="let country of countries; let i = index" [value]="country.cca3 | lowercase">
+                        {{ country.name.common }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Select Borders -->
+            <div *ngIf="form.controls['country']?.value !== ''">
+                <label for="country" class="form-label mt-2">Border:</label>
+                <select class="form-control" name="border" formControlName="border">
+                    <option value=""> -- Select Border -- </option>
+                    <option *ngFor="let border of borders; let i = index" [value]="border.alpha3Code | lowercase">
+                        {{ border.name }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="loadingFlag">
+        <div class="col">
+            <div class="alert alert-primary">
+                Loading...
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary float-end mt-2" type="submit">
+        Seleccionar
+    </button>
+</form>
+
+<br>
+<h3 class="mt-5">Formulario</h3>
+<pre> Valid: {{ form.valid }} </pre>
+<pre> Value: {{ form.value | json  | lowercase}} </pre>
